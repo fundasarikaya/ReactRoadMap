@@ -3,7 +3,7 @@ import classes from "./NewMeetupForm.module.css";
 import { useRef } from "react";
 //React simply allows us to set up references cue DOM elements, so we can get direct access to DOM elements.
 
-function NewMeetupForm() {
+function NewMeetupForm(props) {
   const titleInputRef = useRef();
   const imageInputRef = useRef();
   const addressInputRef = useRef();
@@ -21,7 +21,8 @@ function NewMeetupForm() {
       address: enteredAddress,
       description: enteredDescription,
     };
-    console.log(meetupData);
+
+    props.onAddMeetup(meetupData);
   }
 
   return (
