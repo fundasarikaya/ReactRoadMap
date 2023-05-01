@@ -1,30 +1,52 @@
+import { useState, useEffect } from "react";
 import MeetupList from "../components/meetups/MeetupList";
 
-const DUMMY_DATA = [
-  {
-    id: "m1",
-    title: "This is a first meetup",
-    image: "https://images.alphacoders.com/694/694766.jpg",
-    address: "Some address 5, 12345 Some City",
-    description:
-      "This is a first, amazing meetup which you definitely should not miss. It will be a lot of fun!",
-  },
-  {
-    id: "m2",
-    title: "This is a second meetup",
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5e9EcH5v1mwFf4Qz7k_Tu9VaOBD2V2W531Q&usqp=CAU",
-    address: "Some address 10, 12345 Some City",
-    description:
-      "This is a second, amazing meetup which you definitely should not miss. It will be a lot of fun!",
-  },
-];
-
 function AllMeetupsPage() {
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadedMeetups, setLoadedMeetups] = useState([]);
+
+  useEffect(() => {
+    setIsLoading(true); //This is a state update, and this will trigger a re-evaluation of this component function.
+    fetch(
+      "https://react-getting-started-adf9e-default-rtdb.firebaseio.com/meetups.json"
+    )
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        const meetups = [];
+        for (const key in data) {
+          const meetup = {
+            id: key,
+            ...data[key],
+          };
+          console.log(meetup);
+          console.log(key);
+          meetups.push(meetup);
+        }
+        setIsLoading(false);
+        setLoadedMeetups(meetups);
+      });
+  }, []); //[isLoading] This is a dependency array, and it's a list of all the dependencies that are used in this effect.
+  //So, whenever one of these dependencies changes, this effect will re-run.
+  //So, if we have an empty array here, this effect will only run once when this component is rendered for the first time.
+  //If we have a dependency here, this effect will run whenever this dependency changes.
+  //So, if we have a state here, and we change this state, this effect will run again.
+  //If we have multiple dependencies here, this effect will run whenever one of these dependencies changes.
+  //So, if we have a state here, and we have another state here, and we change one of these states, this effect will run again.
+  //If we have a state here, and we have another state here, and we change both of these states, this effect will run again.
+
+  if (isLoading) {
+    return (
+      <section>
+        <p>Loading...</p>
+      </section>
+    );
+  }
   return (
     <section>
       <h1>All Meetups</h1>
-      <MeetupList meetups={DUMMY_DATA} />
+      <MeetupList meetups={loadedMeetups} />
     </section>
   );
 }
