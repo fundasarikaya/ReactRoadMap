@@ -11,6 +11,7 @@ function AllMeetupsPage() {
       "https://react-getting-started-adf9e-default-rtdb.firebaseio.com/meetups.json"
     )
       .then((response) => {
+        console.log("1" + response);
         return response.json();
       })
       .then((data) => {
@@ -20,8 +21,8 @@ function AllMeetupsPage() {
             id: key,
             ...data[key],
           };
-          console.log(meetup);
-          console.log(key);
+          console.log("2" + meetup);
+          console.log("3" + key);
           meetups.push(meetup);
         }
         setIsLoading(false);
